@@ -7,6 +7,7 @@ const StreamVideo = () => {
   video.width = 500;
   video.height = 500;
   if (navigator.mediaDevices.getUserMedia) {
+    console.log(navigator.mediaDevices.getUserMedia);
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then(function (stream) {
@@ -29,7 +30,7 @@ export const WebCam = () => {
   useEffect(() => {
     handTrack.load().then((model) => {
       setModel(model);
-      setVideo(StreamVideo())
+      setVideo(StreamVideo());
     });
   }, []);
 
@@ -37,6 +38,7 @@ export const WebCam = () => {
     model.detect(video).then((predictions) => {
       //setPredictions((oldPredictions) => [...oldPredictions, predictions]);
       setPredictions(predictions);
+      detect();
     });
   };
 
