@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./WebCam.css";
-const handpose = require('@tensorflow-models/handpose');
-// require('@tensorflow/tfjs-backend-webgl');
-require('@tensorflow/tfjs-backend-wasm');
+import * as handTrack from "handtrackjs";
+
 const StreamVideo = () => {
   var video = document.querySelector("#video");
+  video.width = 500;
+  video.height = 500;
   if (navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true })
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
       .then(function (stream) {
         video.srcObject = stream;
       })
@@ -14,33 +16,40 @@ const StreamVideo = () => {
         console.log("Something went wrong!");
       });
   }
+  return video;
 };
 
 export const WebCam = () => {
+  const [predictions, setPredictions] = useState([]);
+  const [video, setVideo] = useState({});
+  const [model, setModel] = useState(undefined);
+
+  console.log("Predictions:", predictions);
+
+  useEffect(() => {
+    handTrack.load().then((model) => {
+      setModel(model);
+      setVideo(StreamVideo())
+    });
+  }, []);
+
+  const detect = () => {
+    model.detect(video).then((predictions) => {
+      //setPredictions((oldPredictions) => [...oldPredictions, predictions]);
+      setPredictions(predictions);
+    });
+  };
+
   return (
     <div id="container">
-      <button onClick={StreamVideo}>Stream Video</button>
-      <button onClick={PredictPose}>Predict Pose</button>
-      <video autoPlay={true} id="video">
-
-      </video>
+      {model ? (
+        <React.Fragment>
+          <video autoPlay={true} id="video"></video>
+          <button onClick={detect}>Predict Pose</button>
+        </React.Fragment>
+      ) : (
+        <span>Loading model</span>
+      )}
     </div>
   );
-};
-
-async function PredictPose(){
-  const model = await handpose.load();
-  const predictions = await model.estimateHands(document.querySelector("#video"));
-  if (predictions.length > 0) {
-
-    for (let i = 0; i < predictions.length; i++) {
-      const keypoints = predictions[i].landmarks;
-
-      // Log hand keypoints.
-      for (let i = 0; i < keypoints.length; i++) {
-        const [x, y, z] = keypoints[i];
-        console.log(`Keypoint ${i}: [${x}, ${y}, ${z}]`);
-      }
-    }
-  }
 };
