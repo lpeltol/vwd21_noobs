@@ -1,10 +1,11 @@
-.Header {
-  color: tomato;
+.GameContainer {
+  height: 100vh;
 }
 
-.Button {
-  width: 10vh;
-  height: 5;
-  background-color: black;
-  color: white;
+.LoadingSpan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 5vh;
 }
