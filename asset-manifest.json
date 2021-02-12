@@ -1,20 +1,20 @@
 {
   "files": {
     "main.css": "/vwd21_noobs/static/css/main.b9eed43d.chunk.css",
-    "main.js": "/vwd21_noobs/static/js/main.042ef35b.chunk.js",
-    "main.js.map": "/vwd21_noobs/static/js/main.042ef35b.chunk.js.map",
+    "main.js": "/vwd21_noobs/static/js/main.e30a5541.chunk.js",
+    "main.js.map": "/vwd21_noobs/static/js/main.e30a5541.chunk.js.map",
     "runtime-main.js": "/vwd21_noobs/static/js/runtime-main.8c5bac23.js",
     "runtime-main.js.map": "/vwd21_noobs/static/js/runtime-main.8c5bac23.js.map",
-    "static/js/2.94bf1d9b.chunk.js": "/vwd21_noobs/static/js/2.94bf1d9b.chunk.js",
-    "static/js/2.94bf1d9b.chunk.js.map": "/vwd21_noobs/static/js/2.94bf1d9b.chunk.js.map",
+    "static/js/2.7a3c8322.chunk.js": "/vwd21_noobs/static/js/2.7a3c8322.chunk.js",
+    "static/js/2.7a3c8322.chunk.js.map": "/vwd21_noobs/static/js/2.7a3c8322.chunk.js.map",
     "index.html": "/vwd21_noobs/index.html",
     "static/css/main.b9eed43d.chunk.css.map": "/vwd21_noobs/static/css/main.b9eed43d.chunk.css.map",
-    "static/js/2.94bf1d9b.chunk.js.LICENSE.txt": "/vwd21_noobs/static/js/2.94bf1d9b.chunk.js.LICENSE.txt"
+    "static/js/2.7a3c8322.chunk.js.LICENSE.txt": "/vwd21_noobs/static/js/2.7a3c8322.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.8c5bac23.js",
-    "static/js/2.94bf1d9b.chunk.js",
+    "static/js/2.7a3c8322.chunk.js",
     "static/css/main.b9eed43d.chunk.css",
-    "static/js/main.042ef35b.chunk.js"
+    "static/js/main.e30a5541.chunk.js"
   ]
 }
