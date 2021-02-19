@@ -11,7 +11,6 @@ const StreamVideo = () => {
   video.width = SIZE;
   video.height = SIZE;
   if (navigator.mediaDevices.getUserMedia) {
-    console.log(navigator.mediaDevices.getUserMedia);
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then(function (stream) {
