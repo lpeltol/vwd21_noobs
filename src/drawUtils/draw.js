@@ -1,3 +1,5 @@
+import { drawBackground } from "./drawBackground";
+
 let bullet = true;
 let shots = [];
 
@@ -15,7 +17,8 @@ export const draw = (bbox, video) => {
     canvas.height = video?.height;
     canvas.width = video?.width;
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //ctx.drawImage(video, 0, 0);
+
+    drawBackground(canvas?.width, canvas?.height, ctx);
 
     var r = canvas.width * 0.05;
     ctx.save();
