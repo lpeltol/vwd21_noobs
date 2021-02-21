@@ -1,5 +1,10 @@
+import duckDown from './duckDown.png'
+import duckUp from './duckUp.png'
+import duckDead from './duckDead.png'
+const SIZE = 1000;
+
 // class to handle all duck related things
-class DuckHandler {
+export default class DuckHandler {
 
     // Initialize the variables
     static InitializeDucks() {
@@ -97,13 +102,16 @@ class Duck {
         ctx.beginPath();
         ctx.translate(this.x, this.y)
 
+       
         // If duck not ded
         if (!this.dead) {
 
             // Draw duck with wings up
             if (this.pose) {
                 const img = new Image();
-                img.src = "duckUp.png";
+                //img.src = "./duckUp.png";
+                img.src = duckUp;
+
                 this.width = img.width;
                 this.height = img.height;
 
@@ -127,7 +135,9 @@ class Duck {
             // Draw duck with wings down.
             else {
                 const img = new Image();
-                img.src = "duckDown.png";
+                //img.src = "duckDown.png";
+                img.src = duckDown;
+
                 this.width = img.width;
                 this.height = img.height;
 
@@ -147,7 +157,9 @@ class Duck {
         // If duck ded
         else {
             const img = new Image();
+            img.src = duckDead;
             img.src = "duckDead.png";
+
             this.width = img.width;
             this.height = img.height;
             ctx.drawImage(img, 0, 0);
