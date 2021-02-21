@@ -1,4 +1,5 @@
 import { drawBackground } from "./drawBackground";
+import { drawScoreboard } from "./drawScoreboard";
 
 let bullet = true;
 let shots = [];
@@ -19,6 +20,8 @@ export const draw = (bbox, video) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     drawBackground(canvas?.width, canvas?.height, ctx);
+
+    drawScoreboard(ctx, bullet);
 
     var r = canvas.width * 0.05;
     ctx.save();
@@ -47,10 +50,8 @@ export const draw = (bbox, video) => {
       ctx.font = fontSize + "px serif";
       ctx.fillStyle = "black";
       if (ratio < 0.8) {
-        ctx.fillText("Loaded", 100, 100);
         bullet = true;
       } else {
-        ctx.fillText("Reload", 100, 100);
         if (bullet) {
           shots = [...shots, [boxX + boxWidth / 2, boxY + r[3] / 2]];
           bullet = false;
