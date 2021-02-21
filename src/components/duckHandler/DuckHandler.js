@@ -1,7 +1,7 @@
 import duckDown from './duckDown.png'
 import duckUp from './duckUp.png'
 import duckDead from './duckDead.png'
-const SIZE = 1000;
+const SIZE = 600;
 
 // class to handle all duck related things
 export default class DuckHandler {
@@ -87,8 +87,8 @@ class Duck {
         this.x = (!this.side) ? -100 : SIZE + 100;
         this.y = this.randomNumber(Math.floor(SIZE / 2), SIZE)
         this.pose = false;
-        this.xSpeed = (!this.side) ? 2 : -2;
-        this.ySpeed = -this.randomNumber(1, 5);
+        this.xSpeed = (!this.side) ? 1 : -1;
+        this.ySpeed = -this.randomNumber(1, 2);
         this.counter = 0;
         this.width = this.randomNumber(5, 100);
         this.height = this.randomNumber(5, 100);

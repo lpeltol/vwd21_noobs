@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./WebCam.css";
-//import * as handTrack from "handtrackjs";
-import { Canvas } from "../Canvas/Canvas";
 import { draw } from "../../drawUtils/draw";
 import * as handpose from '@tensorflow-models/handpose';
 
@@ -37,31 +35,19 @@ export const WebCam = () => {
   useEffect(() => {
 
     const modelParams = {
-      flipHorizontal: true, // flip e.g for video
+      flipHorizontal: false, // flip e.g for video
       imageScaleFactor: 1, // reduce input image size .
       maxNumBoxes: 1, // maximum number of boxes to detect
       iouThreshold: 0.5, // ioU threshold for non-max suppression
       scoreThreshold: 0.85, // confidence threshold for predictions.
     };
 
-    handpose.load().then((model) => {
+    handpose.load(modelParams).then((model) => {
       setModel(model);
       setVideo(StreamVideo());
     });
 
   }, []);
-
-  /*
-  const detect = () => {
-    model.estimateHands(video).then((hands) => {
-      if (hands != []) {
-        //draw(predictions[0]?.bbox, video);
-        hands.forEach(hand => console.log(hand.landmarks));
-      }
-      detect();
-    });
-  };
-  */
 
   return (
     <div id="container" className={"GameContainer"}>
