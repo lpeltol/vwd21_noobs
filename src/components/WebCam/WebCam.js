@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./WebCam.css";
 import { draw } from "../../drawUtils/draw";
-import * as handpose from '@tensorflow-models/handpose';
+//import * as handpose from '@tensorflow-models/handpose';
+import * as handpose from 'handtrackjs';
+
 
 
 const SIZE = 500;
@@ -35,7 +37,7 @@ export const WebCam = () => {
   useEffect(() => {
 
     const modelParams = {
-      flipHorizontal: false, // flip e.g for video
+      flipHorizontal: true, // flip e.g for video
       imageScaleFactor: 1, // reduce input image size .
       maxNumBoxes: 1, // maximum number of boxes to detect
       iouThreshold: 0.5, // ioU threshold for non-max suppression

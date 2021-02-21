@@ -8,6 +8,8 @@ const GAMESIZE = 600;
 let counter = 0;
 let x_ch = GAMESIZE / 2;
 let y_ch = x_ch;
+let x = GAMESIZE / 2;
+let y = x;
 
 DuckHandler.InitializeDucks();
 
@@ -32,48 +34,63 @@ export const draw = (model) => {
 
   setInterval(function () {
     drawScene(videoCtx, gameCtx, video, model, GE);
-  }, 1);
+  }, 10);
 
 };
 
 const drawScene = (videoCtx, gameCtx, video, model, GE) => {
 
   counter += 1;
-  // var min = Math.min(video.videoWidth, video.videoHeight);
-  // var sx = (video.videoWidth - min) / 2;
-  // var sy = (video.videoHeight - min) / 2;
+  var min = Math.min(video.videoWidth, video.videoHeight);
+  var sx = (video.videoWidth - min) / 2;
+  var sy = (video.videoHeight - min) / 2;
 
-  // videoCtx.save();
-  // videoCtx.beginPath();
-  // videoCtx.clearRect(0, 0, VIDEOSIZE, VIDEOSIZE);
-  // videoCtx.drawImage(video, sx, sy, min, min, 0, 0, VIDEOSIZE, VIDEOSIZE);
-  // videoCtx.restore();
+  videoCtx.save();
+  videoCtx.beginPath();
+  videoCtx.clearRect(0, 0, VIDEOSIZE, VIDEOSIZE);
+  videoCtx.drawImage(video, sx, sy, min, min, 0, 0, VIDEOSIZE, VIDEOSIZE);
+  //videoCtx.drawImage(video, 0, 0);
 
-  // var imgData = videoCtx.getImageData(0, 0, VIDEOSIZE, VIDEOSIZE);
+  videoCtx.restore();
 
-  if (counter == 10) {
-    model.estimateHands(video).then((hands) => {
-      if (hands?.[0]?.boundingBox != undefined) {
+  var imgData = videoCtx.getImageData(0, 0, VIDEOSIZE, VIDEOSIZE);
 
-        //const estimatedGestures = GE.estimate(hands[0].landmarks, 7.5);
+  // FINGER POSE
+  // if (counter == 5) {
+  //   model.estimateHands(video).then((hands) => {
+  //     if (hands?.[0]?.boundingBox != undefined) {
 
-        var x = hands[0].annotations.indexFinger[3][0];
-        var y = hands[0].annotations.indexFinger[3][1];
-        x_ch = Math.floor(x / video.width * GAMESIZE);
-        y_ch = Math.floor(y / video.height * GAMESIZE);
+  //       //const estimatedGestures = GE.estimate(hands[0].landmarks, 7.5);
 
-        console.log(x_ch);
-        console.log(y_ch);
+  //       var x = hands[0].annotations.indexFinger[3][0];
+  //       var y = hands[0].annotations.indexFinger[3][1];
+  //       x_ch = Math.floor(x / video.width * GAMESIZE);
+  //       y_ch = Math.floor(y / video.height * GAMESIZE);
 
-        // console.log(x, y);
-        // console.log(x_ch, y_ch);
-        // drawCrosshair(videoCtx, x, y, VIDEOSIZE);
+  //       console.log(x_ch);
+  //       console.log(y_ch);
+
+  //       // console.log(x, y);
+  //       // console.log(x_ch, y_ch);
+  //       // drawCrosshair(videoCtx, x, y, VIDEOSIZE);
+  //     }
+  //   });
+
+  // HANDTRACK
+  if (counter == 5) {
+    model.detect(imgData).then((predictions) => {
+      if (predictions?.[0]?.bbox != undefined) {
+
+        x = predictions[0].bbox[0] + (predictions[0].bbox[2] / 2);
+        y = predictions[0].bbox[1] + (predictions[0].bbox[3] / 2);
+        x_ch = Math.floor(x / imgData.width * GAMESIZE);
+        y_ch = Math.floor(y / imgData.height * GAMESIZE);
+
       }
     });
 
     counter = 0;
   }
-
   drawBackground(GAMESIZE, GAMESIZE, gameCtx);
   drawCrosshair(gameCtx, x_ch, y_ch, GAMESIZE);
   DuckHandler.CreateNewDuck(0.01);
