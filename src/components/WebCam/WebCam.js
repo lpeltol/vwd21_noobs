@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "./WebCam.css";
+import * as handpose from "handtrackjs";
+import PulseLoader from "react-spinners/PulseLoader";
 import { draw } from "../../drawUtils/draw";
-//import * as handpose from '@tensorflow-models/handpose';
-import * as handpose from 'handtrackjs';
-
-
+import "./WebCam.css";
 
 const SIZE = 500;
 
 const StreamVideo = () => {
-
   var video = document.querySelector("#video");
   video.width = SIZE;
   video.height = SIZE;
@@ -30,12 +27,10 @@ const StreamVideo = () => {
 };
 
 export const WebCam = () => {
-
   const [video, setVideo] = useState({});
   const [model, setModel] = useState(undefined);
 
   useEffect(() => {
-
     const modelParams = {
       flipHorizontal: true, // flip e.g for video
       imageScaleFactor: 1, // reduce input image size .
@@ -48,7 +43,6 @@ export const WebCam = () => {
       setModel(model);
       setVideo(StreamVideo());
     });
-
   }, []);
 
   return (
@@ -56,22 +50,35 @@ export const WebCam = () => {
       {model ? (
         <React.Fragment>
           <video autoPlay={true} id="video"></video>
-          <button onClick={() => draw(model)} className="startButton" id="startButton">Start game</button>
+          <button
+            onClick={() => draw(model)}
+            className="startButton"
+            id="startButton"
+          >
+            Start game
+          </button>
           <div className="canvasWrapper">
             <div className="scoreboard" id="scoreboard">
-              <span className="gameOverText">
-                GAME OVER!
-              </span>
+              <span className="gameOverText">GAME OVER!</span>
               <p id="score"></p>
-              <button onClick={() => draw(model)} className="playAgainButton" id="playAgainButton">Play again!</button>
+              <button
+                onClick={() => draw(model)}
+                className="playAgainButton"
+                id="playAgainButton"
+              >
+                Play again!
+              </button>
             </div>
             <canvas id="videoCanvas" />
             <canvas id="gameCanvas" />
           </div>
         </React.Fragment>
       ) : (
-          <span className={"LoadingSpan"}>Loading model</span>
-        )}
+        <React.Fragment>
+          <span className={"LoadingSpan"}>Game is initializing</span>
+          <PulseLoader size={20} margin={15} />
+        </React.Fragment>
+      )}
     </div>
   );
 };

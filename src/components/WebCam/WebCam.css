@@ -11,14 +11,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   font-size: 5vh;
+  margin-bottom: 20px;
 }
 
 .startButton {
   padding: 10px 20px;
-  margin: 20px 0px 10px 0px;
   z-index: 200;
+  position: absolute;
   border-radius: 50px;
 }
 
