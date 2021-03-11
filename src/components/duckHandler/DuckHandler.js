@@ -89,9 +89,9 @@ class Duck {
         this.x = (!this.side) ? -100 : SIZE + 100;
         this.y = this.randomNumber(Math.floor(SIZE * 0.8), SIZE)
         this.pose = false;
-        this.xSpeed = (!this.side) ? 1 : -1;
+        this.xSpeed = (!this.side) ? 0.5 : -0.5;
         //this.ySpeed = -this.randomNumber(1, 2);
-        this.ySpeed = -1;
+        this.ySpeed = -0.5;
         this.counter = 0;
         this.width = this.randomNumber(5, 100);
         this.height = this.randomNumber(5, 100);
