@@ -56,8 +56,15 @@ export const WebCam = () => {
       {model ? (
         <React.Fragment>
           <video autoPlay={true} id="video"></video>
-          <button onClick={() => draw(model)} className="startButton">Predict Pose</button>
+          <button onClick={() => draw(model)} className="startButton" id="startButton">Start game</button>
           <div className="canvasWrapper">
+            <div className="scoreboard" id="scoreboard">
+              <span className="gameOverText">
+                GAME OVER!
+              </span>
+              <p id="score"></p>
+              <button onClick={() => draw(model)} className="playAgainButton" id="playAgainButton">Play again!</button>
+            </div>
             <canvas id="videoCanvas" />
             <canvas id="gameCanvas" />
           </div>

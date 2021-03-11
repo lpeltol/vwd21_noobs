@@ -5,6 +5,7 @@ import { drawScoreboard } from "./drawScoreboard";
 
 let bullet = true;
 let shots = [];
+let lives = 1;
 const VIDEOSIZE = 400;
 const GAMESIZE = 400;
 let counter = 0;
@@ -13,7 +14,10 @@ let y = 0.5;
 
 export const draw = (model) => {
   DuckHandler.InitializeDucks(GAMESIZE);
-
+  let startButton = document.getElementById("startButton");
+  startButton.style.display = "none";
+  let scoreboard = document.getElementById("scoreboard");
+  scoreboard.style.display = "none";
   var video = document.getElementById("video");
 
   var videoCanvas = document.getElementById("videoCanvas");
@@ -26,12 +30,12 @@ export const draw = (model) => {
   gameCanvas.width = GAMESIZE;
   var gameCtx = gameCanvas.getContext("2d");
 
-  setInterval(function () {
-    drawScene(videoCtx, gameCtx, video, model);
+  let intervalId = setInterval(function () {
+    drawScene(videoCtx, gameCtx, video, model, intervalId);
   }, 10);
 };
 
-const drawScene = (videoCtx, gameCtx, video, model) => {
+const drawScene = (videoCtx, gameCtx, video, model, intervalId) => {
   counter += 1;
   var min = Math.min(video.videoWidth, video.videoHeight);
   var sx = (video.videoWidth - min) / 2;
@@ -46,10 +50,9 @@ const drawScene = (videoCtx, gameCtx, video, model) => {
   var imgData = videoCtx.getImageData(0, 0, VIDEOSIZE, VIDEOSIZE);
 
   drawBackground(GAMESIZE, GAMESIZE, gameCtx);
-  drawScoreboard(gameCtx, bullet);
 
   // HANDTRACK
-  if (counter == 5) {
+  if (counter === 5) {
     model.detect(imgData).then((predictions) => {
       if (predictions?.[0]?.bbox != undefined) {
         x = (predictions[0].bbox[0] + predictions[0].bbox[2] / 2) / VIDEOSIZE;
@@ -68,7 +71,7 @@ const drawScene = (videoCtx, gameCtx, video, model) => {
           bullet = true;
         }
 
-        console.log(ratio, bullet);
+        // console.log(ratio, bullet);
       }
     });
 
@@ -79,6 +82,20 @@ const drawScene = (videoCtx, gameCtx, video, model) => {
   DuckHandler.CreateNewDuck(0.01);
   DuckHandler.DrawDucksAndUpdate(gameCtx);
   DuckHandler.DeleteDucks();
+  let escapedDucks = DuckHandler.escapeCount;
+  if (escapedDucks === lives) {
+    clearInterval(intervalId);
+    let scoreboard = document.getElementById("scoreboard");
+    scoreboard.style.display = "block";
+    document.getElementById("score").innerHTML = `Congratulations! You managed to hunt down ${DuckHandler.killCount} duck(s)!`
+  }
+  drawScoreboard(
+    gameCtx,
+    bullet,
+    DuckHandler.killCount,
+    lives,
+    DuckHandler.escapeCount
+  );
 };
 
 const drawCrosshair = (ctx, x, y, SIZE) => {
