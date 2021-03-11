@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "./WebCam.css";
-import * as handTrack from "handtrackjs";
-import { Canvas } from "../Canvas/Canvas";
 import { draw } from "../../drawUtils/draw";
+//import * as handpose from '@tensorflow-models/handpose';
+import * as handpose from 'handtrackjs';
+
+
 
 const SIZE = 500;
 
 const StreamVideo = () => {
+
   var video = document.querySelector("#video");
   video.width = SIZE;
   video.height = SIZE;
+
   if (navigator.mediaDevices.getUserMedia) {
+    //console.log(navigator.mediaDevices.getUserMedia);
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then(function (stream) {
@@ -20,14 +25,17 @@ const StreamVideo = () => {
         console.log("Something went wrong!");
       });
   }
+
   return video;
 };
 
 export const WebCam = () => {
+
   const [video, setVideo] = useState({});
   const [model, setModel] = useState(undefined);
 
   useEffect(() => {
+
     const modelParams = {
       flipHorizontal: true, // flip e.g for video
       imageScaleFactor: 1, // reduce input image size .
@@ -35,32 +43,35 @@ export const WebCam = () => {
       iouThreshold: 0.5, // ioU threshold for non-max suppression
       scoreThreshold: 0.85, // confidence threshold for predictions.
     };
-    handTrack.load(modelParams).then((model) => {
+
+    handpose.load(modelParams).then((model) => {
       setModel(model);
       setVideo(StreamVideo());
     });
-  }, []);
 
-  const detect = () => {
-    model.detect(video).then((predictions) => {
-      if (predictions) {
-        draw(predictions[0]?.bbox, video);
-      }
-      detect();
-    });
-  };
+  }, []);
 
   return (
     <div id="container" className={"GameContainer"}>
       {model ? (
         <React.Fragment>
           <video autoPlay={true} id="video"></video>
-          <button onClick={detect}>Predict Pose</button>
-          <Canvas id={"myCanvas"} />
+          <button onClick={() => draw(model)} className="startButton" id="startButton">Start game</button>
+          <div className="canvasWrapper">
+            <div className="scoreboard" id="scoreboard">
+              <span className="gameOverText">
+                GAME OVER!
+              </span>
+              <p id="score"></p>
+              <button onClick={() => draw(model)} className="playAgainButton" id="playAgainButton">Play again!</button>
+            </div>
+            <canvas id="videoCanvas" />
+            <canvas id="gameCanvas" />
+          </div>
         </React.Fragment>
       ) : (
-        <span className={"LoadingSpan"}>Loading model</span>
-      )}
+          <span className={"LoadingSpan"}>Loading model</span>
+        )}
     </div>
   );
 };

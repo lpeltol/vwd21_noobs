@@ -1,11 +1,18 @@
+import duckDown from './duckDown.png'
+import duckUp from './duckUp.png'
+import duckDead from './duckDead.png'
+var SIZE;
+
 // class to handle all duck related things
-class DuckHandler {
+export default class DuckHandler {
 
     // Initialize the variables
-    static InitializeDucks() {
+    static InitializeDucks(size) {
         this.DUCKS = []; // Contains all the ducks
         this.escapeCount = 0; // Keeps count how many ducks have escaped from the frame
         this.killCount = 0; // Keeps count how many the player has managed to shoot.
+        SIZE = size;
+        
     }
 
     // Create new duck with pr% chance per frame.
@@ -80,10 +87,11 @@ class Duck {
         this.side = this.StartSide();
         this.dead = false;
         this.x = (!this.side) ? -100 : SIZE + 100;
-        this.y = this.randomNumber(Math.floor(SIZE / 2), SIZE)
+        this.y = this.randomNumber(Math.floor(SIZE * 0.8), SIZE)
         this.pose = false;
-        this.xSpeed = (!this.side) ? 2 : -2;
-        this.ySpeed = -this.randomNumber(1, 5);
+        this.xSpeed = (!this.side) ? 0.5 : -0.5;
+        //this.ySpeed = -this.randomNumber(1, 2);
+        this.ySpeed = -0.5;
         this.counter = 0;
         this.width = this.randomNumber(5, 100);
         this.height = this.randomNumber(5, 100);
@@ -97,13 +105,16 @@ class Duck {
         ctx.beginPath();
         ctx.translate(this.x, this.y)
 
+       
         // If duck not ded
         if (!this.dead) {
 
             // Draw duck with wings up
             if (this.pose) {
                 const img = new Image();
-                img.src = "duckUp.png";
+                //img.src = "./duckUp.png";
+                img.src = duckUp;
+
                 this.width = img.width;
                 this.height = img.height;
 
@@ -127,7 +138,9 @@ class Duck {
             // Draw duck with wings down.
             else {
                 const img = new Image();
-                img.src = "duckDown.png";
+                //img.src = "duckDown.png";
+                img.src = duckDown;
+
                 this.width = img.width;
                 this.height = img.height;
 
@@ -147,7 +160,8 @@ class Duck {
         // If duck ded
         else {
             const img = new Image();
-            img.src = "duckDead.png";
+            img.src = duckDead;
+
             this.width = img.width;
             this.height = img.height;
             ctx.drawImage(img, 0, 0);
