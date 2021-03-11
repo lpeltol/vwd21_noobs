@@ -1,16 +1,18 @@
 import duckDown from './duckDown.png'
 import duckUp from './duckUp.png'
 import duckDead from './duckDead.png'
-const SIZE = 600;
+var SIZE;
 
 // class to handle all duck related things
 export default class DuckHandler {
 
     // Initialize the variables
-    static InitializeDucks() {
+    static InitializeDucks(size) {
         this.DUCKS = []; // Contains all the ducks
         this.escapeCount = 0; // Keeps count how many ducks have escaped from the frame
         this.killCount = 0; // Keeps count how many the player has managed to shoot.
+        SIZE = size;
+        
     }
 
     // Create new duck with pr% chance per frame.
@@ -159,7 +161,6 @@ class Duck {
         else {
             const img = new Image();
             img.src = duckDead;
-            img.src = "duckDead.png";
 
             this.width = img.width;
             this.height = img.height;
