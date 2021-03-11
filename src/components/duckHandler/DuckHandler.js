@@ -1,6 +1,9 @@
 import duckDown from './duckDown.png'
 import duckUp from './duckUp.png'
 import duckDead from './duckDead.png'
+
+import shoot from '../../sounds/shoot.mp3'
+
 var SIZE;
 
 // class to handle all duck related things
@@ -56,25 +59,8 @@ export default class DuckHandler {
 
     // Create epic sound to indicate shots fired.
     static CreateShootingSound() {
-
-        var duration = 200;
-        var audioCtx = new AudioContext();
-        var osc = audioCtx.createOscillator();
-        var gain = audioCtx.createGain()
-        osc.connect(gain)
-        gain.connect(audioCtx.destination)
-        osc.frequency.value = 1000;
-        osc.type = 'sine';
-        gain.gain.setValueAtTime(0, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.1);
-        osc.frequency.linearRampToValueAtTime(200, audioCtx.currentTime + duration / 1000);
-        osc.start(audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration / 1000);
-        osc.stop(audioCtx.currentTime + duration / 1000);
-        setTimeout(function () {
-            osc.disconnect();
-        }, duration);
-
+        var shootSound = new Audio(shoot)
+        shootSound.play();
     }
 
 }

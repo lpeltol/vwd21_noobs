@@ -1,6 +1,7 @@
 import DuckHandler from "../components/duckHandler/DuckHandler";
 import { drawBackground } from "./drawBackground";
 import { drawScoreboard } from "./drawScoreboard";
+import reload from '../sounds/reload.wav'
 
 let bullet = true;
 let shots = [];
@@ -71,7 +72,9 @@ const drawScene = (videoCtx, gameCtx, video, model, intervalId) => {
           bullet = false;
         }
 
-        if (ratio <= 0.6) {
+        if (ratio <= 0.6 && bullet === false) {
+          var reloadSound = new Audio(reload);
+          reloadSound.play();
           bullet = true;
         }
       }
