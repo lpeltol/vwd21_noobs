@@ -1,10 +1,10 @@
-export const drawScoreboard = (ctx, bullet) => {
+export const drawScoreboard = (ctx, bullet, score, lives, livesLeft) => {
   ctx.save();
   ctx.scale(1, 1);
-  ctx.font = "20px Verdana";
-  ctx.fillStyle = "tomato";
-  ctx.fillText(`BULLETS: ${bullet ? "1" : "0"}`, 5, 430);
-  ctx.fillText("SCORE: ", 5, 460);
-  ctx.fillText("LIVES: ", 5, 490);
+  ctx.font = "500 18px Verdana";
+  ctx.fillStyle = "white";
+  ctx.fillText(`BULLETS: ${bullet ? "1" : "0"}`, 5, 550);
+  ctx.fillText(`SCORE: ${score ? score : "0"}`, 5, 570);
+  ctx.fillText(`LIVES: ${livesLeft ? lives - livesLeft : lives}`, 5, 590);
   ctx.restore();
 };
