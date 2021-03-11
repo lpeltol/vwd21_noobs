@@ -43,7 +43,7 @@
   display: none;
   position: absolute;
   background: white;
-  opacity: 90%;
+  opacity: 0.9;
   border-radius: 50px;
 }
 
@@ -64,6 +64,6 @@
   width: 40vw;
 }
 #gameCanvas {
-  height: 50vw;
-  width: 50vw;
+  height: 40vw;
+  width: 40vw;
 }
