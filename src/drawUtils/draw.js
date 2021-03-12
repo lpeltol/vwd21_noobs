@@ -17,12 +17,14 @@ var yPositions = [];
 
 export const draw = (model) => {
   DuckHandler.InitializeDucks(GAMESIZE);
-  let startButton = document.getElementById("startButton");
+  let startButton = document.getElementById("StartGame");
   startButton.style.display = "none";
-  let scoreboard = document.getElementById("scoreboard");
-  scoreboard.style.display = "none";
-  var video = document.getElementById("video");
+  let gameOverMenu = document.getElementById("GameOver");
+  let startGameMenu = document.getElementById("StartGame");
+  gameOverMenu.style.display = "none";
+  startGameMenu.style.display = "none";
 
+  var video = document.getElementById("video");
   var videoCanvas = document.getElementById("videoCanvas");
   videoCanvas.height = VIDEOSIZE;
   videoCanvas.width = VIDEOSIZE;
@@ -100,8 +102,8 @@ const drawScene = (videoCtx, gameCtx, video, model, intervalId) => {
   let escapedDucks = DuckHandler.escapeCount;
   if (escapedDucks === lives) {
     clearInterval(intervalId);
-    let scoreboard = document.getElementById("scoreboard");
-    scoreboard.style.display = "block";
+    let gameOverMenu = document.getElementById("GameOver");
+    gameOverMenu.style.display = "flex";
     document.getElementById(
       "score"
     ).innerHTML = `Congratulations! You managed to hunt down ${DuckHandler.killCount} duck(s)!`;

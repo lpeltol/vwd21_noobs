@@ -1,0 +1,36 @@
+.Menu {
+  height: 30vw;
+  width: 30vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: absolute;
+  background: whitesmoke;
+  opacity: 0.9;
+  border-radius: 50px;
+  border: 3px solid black;
+}
+
+#GameOver {
+  display: none;
+}
+
+.PlayButton {
+  padding: 10px 20px;
+  margin: 50px 0px 20px 0px;
+  z-index: 200;
+  border-radius: 50px;
+  align-self: center;
+  font-weight: 600;
+  color: black;
+  background-color: skyblue;
+  border: 2px solid black;
+}
+
+.MenuHeader {
+  color: black;
+  font-weight: bold;
+  font-size: 30px;
+  /* line-height: 2; */
+  margin: 20px 0 10px 0;
+}

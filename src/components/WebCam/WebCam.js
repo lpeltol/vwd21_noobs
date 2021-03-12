@@ -3,6 +3,8 @@ import * as handpose from "handtrackjs";
 import PulseLoader from "react-spinners/PulseLoader";
 import { draw } from "../../drawUtils/draw";
 import "./WebCam.css";
+import { GameMenu } from "../GameMenu/GameMenu";
+import { drawBackground } from "../../drawUtils/drawBackground";
 
 const SIZE = 500;
 
@@ -24,6 +26,14 @@ const StreamVideo = () => {
   }
 
   return video;
+};
+
+const initBackground = () => {
+  var gameCanvas = document.getElementById("gameCanvas");
+  if (gameCanvas) {
+    var gameCtx = gameCanvas.getContext("2d");
+    drawBackground(gameCanvas.width, gameCanvas.height, gameCtx);
+  }
 };
 
 export const WebCam = () => {
@@ -50,27 +60,31 @@ export const WebCam = () => {
       {model ? (
         <React.Fragment>
           <video autoPlay={true} id="video"></video>
-          <button
-            onClick={() => draw(model)}
-            className="startButton"
-            id="startButton"
-          >
-            Start game
-          </button>
           <div className="canvasWrapper">
-            <div className="scoreboard" id="scoreboard">
-              <span className="gameOverText">GAME OVER!</span>
-              <p id="score"></p>
-              <button
-                onClick={() => draw(model)}
-                className="playAgainButton"
-                id="playAgainButton"
-              >
-                Play again!
-              </button>
-            </div>
+            <GameMenu
+              id="StartGame"
+              header="DUCK SHOOTER"
+              score={false}
+              body={
+                <div>
+                  <i>How to play</i>
+                  <p>Aim with your hand</p>
+                  <p>Shoot by spreading your fingers</p>
+                  <p>Reload by clenching fingers together</p>
+                </div>
+              }
+              onClick={() => draw(model)}
+              buttonTxt="Start game"
+            />
+            <GameMenu
+              id="GameOver"
+              header="Game over!"
+              score={true}
+              onClick={() => draw(model)}
+              buttonTxt="Play again"
+            />
             <canvas id="videoCanvas" />
-            <canvas id="gameCanvas" />
+            <canvas id="gameCanvas" onLoad={initBackground()} />
           </div>
         </React.Fragment>
       ) : (
