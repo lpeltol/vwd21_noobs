@@ -37,7 +37,6 @@ export default class DuckHandler {
         this.DUCKS.forEach(duck => {
             duck.draw(ctx);
             duck.updatePosition();
-            console.log(duck);
         });
     }
 

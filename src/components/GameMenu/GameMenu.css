@@ -11,6 +11,28 @@
   border: 3px solid black;
 }
 
+.Menu > .difficultSelect {
+  display: flex;
+  flex-direction: column;
+}
+
+.Menu > .difficultSelect > select {
+  margin-top: 5px;
+  max-width: 110px;
+  align-self: center;
+}
+
+.Menu > div > .difficultSelect {
+  display: flex;
+  flex-direction: column;
+}
+
+.Menu > div > .difficultSelect > select {
+  margin-top: 5px;
+  max-width: 110px;
+  align-self: center;
+}
+
 #GameOver {
   display: none;
 }
@@ -31,6 +53,5 @@
   color: black;
   font-weight: bold;
   font-size: 30px;
-  /* line-height: 2; */
   margin: 20px 0 10px 0;
 }

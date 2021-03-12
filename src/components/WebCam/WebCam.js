@@ -39,6 +39,7 @@ const initBackground = () => {
 export const WebCam = () => {
   const [video, setVideo] = useState({});
   const [model, setModel] = useState(undefined);
+  const [difficulty, setDifficulty] = useState("easy");
 
   useEffect(() => {
     const modelParams = {
@@ -71,16 +72,40 @@ export const WebCam = () => {
                   <p>Aim with your hand</p>
                   <p>Shoot by spreading your fingers</p>
                   <p>Reload by clenching fingers together</p>
+                  <div className="difficultSelect">
+                    <label htmlFor="difficulty">Select difficulty:</label>
+                    <select
+                      id="difficulty"
+                      onChange={(e) => setDifficulty(e.target.value)}
+                    >
+                      <option value="easy">Easy</option>
+                      <option value="medium">Normal</option>
+                      <option value="impossible">Impossible</option>
+                    </select>
+                  </div>
                 </div>
               }
-              onClick={() => draw(model)}
+              onClick={() => draw(model, difficulty)}
               buttonTxt="Start game"
             />
             <GameMenu
               id="GameOver"
               header="Game over!"
               score={true}
-              onClick={() => draw(model)}
+              body={
+                <div className="difficultSelect">
+                  <label htmlFor="difficulty2">Select difficulty:</label>
+                  <select
+                    id="difficulty2"
+                    onChange={(e) => setDifficulty(e.target.value)}
+                  >
+                    <option value="easy">Easy</option>
+                    <option value="medium">Normal</option>
+                    <option value="impossible">Impossible</option>
+                  </select>
+                </div>
+              }
+              onClick={() => draw(model, difficulty)}
               buttonTxt="Play again"
             />
             <canvas id="videoCanvas" />

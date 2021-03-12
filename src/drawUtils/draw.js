@@ -33,9 +33,29 @@ var impossible = {
   speed: 0.003,
 };
 
-export const draw = (model) => {
-  DuckHandler.InitializeDucks(medium);
-  GAMESIZE = medium.size;
+export const draw = (model, difficulty) => {
+  switch (difficulty) {
+    case "easy": {
+      DuckHandler.InitializeDucks(easy);
+      GAMESIZE = easy.size;
+      break;
+    }
+    case "medium": {
+      DuckHandler.InitializeDucks(medium);
+      GAMESIZE = medium.size;
+      break;
+    }
+    case "impossible": {
+      DuckHandler.InitializeDucks(impossible);
+      GAMESIZE = impossible.size;
+      break;
+    }
+    default: {
+      DuckHandler.InitializeDucks(medium);
+      GAMESIZE = medium.size;
+      break;
+    }
+  }
 
   let startButton = document.getElementById("StartGame");
   startButton.style.display = "none";
