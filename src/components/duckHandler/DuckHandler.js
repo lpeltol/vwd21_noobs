@@ -4,25 +4,31 @@ import duckDead from './duckDead.png'
 
 import shoot from '../../sounds/shoot.mp3'
 
-var SIZE;
+const imgDuckDown = new Image();
+imgDuckDown.src = duckDown;
+const imgDuckUp = new Image();
+imgDuckUp.src = duckUp;
+const imgDuckDead = new Image();
+imgDuckDead.src = duckDead;
+const IMAGEWIDTH = imgDuckDown.width;
+const IMAGEHEIGHT = imgDuckDown.height;
 
 // class to handle all duck related things
 export default class DuckHandler {
 
     // Initialize the variables
-    static InitializeDucks(size) {
+    static InitializeDucks(difficulty) {
         this.DUCKS = []; // Contains all the ducks
         this.escapeCount = 0; // Keeps count how many ducks have escaped from the frame
         this.killCount = 0; // Keeps count how many the player has managed to shoot.
-        SIZE = size;
-        
+        this.difficulty = difficulty;
     }
 
     // Create new duck with pr% chance per frame.
-    static CreateNewDuck(pr) {
+    static CreateNewDuck() {
         var ran = Math.random();
-        if (ran > (1 - pr)) {
-            this.DUCKS.push(new Duck());
+        if (ran > (1 - this.difficulty.probability)) {
+            this.DUCKS.push(new Duck(this.difficulty));
         }
     }
 
@@ -31,6 +37,7 @@ export default class DuckHandler {
         this.DUCKS.forEach(duck => {
             duck.draw(ctx);
             duck.updatePosition();
+            console.log(duck);
         });
     }
 
@@ -69,19 +76,18 @@ export default class DuckHandler {
 class Duck {
 
     // Constructor for the bird
-    constructor() {
-        this.side = this.StartSide();
+    constructor(difficulty) {
+        this.size = difficulty.size;
+        this.side = (Math.random() > 0.5) ? true : false;
         this.dead = false;
-        this.x = (!this.side) ? -100 : SIZE + 100;
-        this.y = this.randomNumber(Math.floor(SIZE * 0.8), SIZE)
+        this.x = (!this.side) ? -IMAGEWIDTH : this.size + IMAGEWIDTH;
+        this.y = this.randomNumber(Math.floor(this.size * 0.8), this.size)
         this.pose = false;
-        this.xSpeed = (!this.side) ? 0.5 : -0.5;
-        //this.ySpeed = -this.randomNumber(1, 2);
-        this.ySpeed = -0.5;
+        this.xSpeed = (!this.side) ? difficulty.speed * this.size : -difficulty.speed * this.size;
+        this.ySpeed = -this.size * difficulty.speed;
         this.counter = 0;
-        this.width = this.randomNumber(5, 100);
-        this.height = this.randomNumber(5, 100);
-        this.color = "#" + ((1 << 24) * Math.random() | 0).toString(16);
+        this.width = IMAGEWIDTH;
+        this.height = IMAGEHEIGHT;
     }
 
     // Function to draw bird
@@ -91,27 +97,23 @@ class Duck {
         ctx.beginPath();
         ctx.translate(this.x, this.y)
 
-       
+
         // If duck not ded
         if (!this.dead) {
 
             // Draw duck with wings up
             if (this.pose) {
-                const img = new Image();
-                //img.src = "./duckUp.png";
-                img.src = duckUp;
-
-                this.width = img.width;
-                this.height = img.height;
+                // const img = new Image();
+                // img.src = duckUp;
 
                 // Draw duck coming from left
                 if (!this.side) {
-                    ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(imgDuckUp, 0, 0);
                 }
 
                 // Draw duck coming from right
                 else {
-                    this.flipImage(img, 0, 0, ctx);
+                    this.flipImage(imgDuckUp, 0, 0, ctx);
                 }
 
                 // Draw 10 frames with wings up and down
@@ -123,18 +125,12 @@ class Duck {
 
             // Draw duck with wings down.
             else {
-                const img = new Image();
-                //img.src = "duckDown.png";
-                img.src = duckDown;
-
-                this.width = img.width;
-                this.height = img.height;
 
                 if (!this.side) {
-                    ctx.drawImage(img, 0, 0);
+                    ctx.drawImage(imgDuckDown, 0, 0);
                 }
                 else {
-                    this.flipImage(img, 0, 0, ctx);
+                    this.flipImage(imgDuckDown, 0, 0, ctx);
                 }
                 if (this.counter == 10) {
                     this.pose = true;
@@ -145,12 +141,7 @@ class Duck {
         }
         // If duck ded
         else {
-            const img = new Image();
-            img.src = duckDead;
-
-            this.width = img.width;
-            this.height = img.height;
-            ctx.drawImage(img, 0, 0);
+            ctx.drawImage(imgDuckDead, 0, 0);
         }
 
         ctx.restore();
@@ -168,7 +159,7 @@ class Duck {
             this.ySpeed = 5;
 
             // Stop when hit ground
-            if (this.y >= SIZE * 0.8) {
+            if (this.y >= this.size * 0.8) {
                 this.ySpeed = 0;
             }
         }
@@ -180,7 +171,6 @@ class Duck {
         ctx.translate(x + img.width, y);
         ctx.scale(-1, 1);
         ctx.drawImage(img, 0, 0);
-        //ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.restore();
     }
 
