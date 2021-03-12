@@ -7,7 +7,7 @@ let bullet = true;
 let shots = [];
 let lives = 10;
 const VIDEOSIZE = 150;
-const GAMESIZE = 600;
+var GAMESIZE;
 let counter = 0;
 let x = 0.5;
 let y = 0.5;
@@ -15,8 +15,29 @@ const numAvgPos = 5;
 var xPositions = [];
 var yPositions = [];
 
+var easy = {
+  probability: 0.005,
+  size: 600,
+  speed: 0.001
+}
+
+var medium = {
+  probability: 0.01,
+  size: 800,
+  speed: 0.002
+}
+
+var impossible = {
+  probability: 0.015,
+  size: 1000,
+  speed: 0.003
+}
+
 export const draw = (model) => {
-  DuckHandler.InitializeDucks(GAMESIZE);
+
+  DuckHandler.InitializeDucks(medium);
+  GAMESIZE = medium.size;
+
   let startButton = document.getElementById("startButton");
   startButton.style.display = "none";
   let scoreboard = document.getElementById("scoreboard");
@@ -34,11 +55,11 @@ export const draw = (model) => {
   var gameCtx = gameCanvas.getContext("2d");
 
   let intervalId = setInterval(function () {
-    drawScene(videoCtx, gameCtx, video, model, intervalId);
+    drawScene(gameCanvas, videoCtx, gameCtx, video, model, intervalId);
   }, 10);
 };
 
-const drawScene = (videoCtx, gameCtx, video, model, intervalId) => {
+const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
   counter += 1;
   var min = Math.min(video.videoWidth, video.videoHeight);
   var sx = (video.videoWidth - min) / 2;
@@ -94,9 +115,10 @@ const drawScene = (videoCtx, gameCtx, video, model, intervalId) => {
 
   drawCrosshair(gameCtx, x, y, GAMESIZE);
 
-  DuckHandler.CreateNewDuck(0.005);
+  DuckHandler.CreateNewDuck();
   DuckHandler.DrawDucksAndUpdate(gameCtx);
   DuckHandler.DeleteDucks();
+
   let escapedDucks = DuckHandler.escapeCount;
   if (escapedDucks === lives) {
     clearInterval(intervalId);
@@ -107,6 +129,7 @@ const drawScene = (videoCtx, gameCtx, video, model, intervalId) => {
     ).innerHTML = `Congratulations! You managed to hunt down ${DuckHandler.killCount} duck(s)!`;
   }
   drawScoreboard(
+    gameCanvas,
     gameCtx,
     bullet,
     DuckHandler.killCount,
