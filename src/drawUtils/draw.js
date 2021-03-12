@@ -11,6 +11,9 @@ const GAMESIZE = 600;
 let counter = 0;
 let x = 0.5;
 let y = 0.5;
+const numAvgPos = 5;
+var xPositions = [];
+var yPositions = [];
 
 export const draw = (model) => {
   DuckHandler.InitializeDucks(GAMESIZE);
@@ -55,9 +58,15 @@ const drawScene = (videoCtx, gameCtx, video, model, intervalId) => {
   if (counter === 5) {
     model.detect(imgData).then((predictions) => {
       if (predictions?.[0]?.bbox != undefined) {
-        x = (predictions[0].bbox[0] + predictions[0].bbox[2] / 2) / VIDEOSIZE;
-        y = (predictions[0].bbox[1] + predictions[0].bbox[3] / 2) / VIDEOSIZE;
 
+        x = (predictions[0].bbox[0] + predictions[0].bbox[2] / 2);
+        y = (predictions[0].bbox[1] + predictions[0].bbox[3] / 2);
+        var positions = calculateAveragePosition(x, y);
+        x = positions[0] / VIDEOSIZE;
+        y = positions[1] / VIDEOSIZE;
+
+        // x = (predictions[0].bbox[0] + predictions[0].bbox[2] / 2) / VIDEOSIZE;
+        // y = (predictions[0].bbox[1] + predictions[0].bbox[3] / 2) / VIDEOSIZE;
         var ratio = predictions[0].bbox[2] / predictions[0].bbox[3];
 
         var x1 = x - 0.5;
@@ -82,6 +91,7 @@ const drawScene = (videoCtx, gameCtx, video, model, intervalId) => {
 
     counter = 0;
   }
+
   drawCrosshair(gameCtx, x, y, GAMESIZE);
 
   DuckHandler.CreateNewDuck(0.005);
@@ -138,3 +148,24 @@ const drawBoundingBox = (ctx, x, y, w, h) => {
   ctx.stroke();
   ctx.restore();
 };
+
+const calculateAveragePosition = (x, y) => {
+
+  if (xPositions.length < numAvgPos) {
+    xPositions.push(x);
+    yPositions.push(y);
+  }
+  else {
+    xPositions.push(x);
+    yPositions.push(y);
+
+    xPositions.splice(0, 1);
+    yPositions.splice(0, 1);
+  }
+
+  // https://jrsinclair.com/articles/2019/five-ways-to-average-with-js-reduce/
+  var xAvg = xPositions.reduce((a, b) => (a + b)) / xPositions.length;
+  var yAvg = yPositions.reduce((a, b) => (a + b)) / yPositions.length;
+
+  return [xAvg, yAvg];
+}
