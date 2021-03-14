@@ -10,8 +10,8 @@ const imgDuckUp = new Image();
 imgDuckUp.src = duckUp;
 const imgDuckDead = new Image();
 imgDuckDead.src = duckDead;
-const IMAGEWIDTH = imgDuckDown.width;
-const IMAGEHEIGHT = imgDuckDown.height;
+var IMAGEWIDTH;
+var IMAGEHEIGHT;
 
 // class to handle all duck related things
 export default class DuckHandler {
@@ -22,6 +22,8 @@ export default class DuckHandler {
         this.escapeCount = 0; // Keeps count how many ducks have escaped from the frame
         this.killCount = 0; // Keeps count how many the player has managed to shoot.
         this.difficulty = difficulty;
+        IMAGEWIDTH = imgDuckDown.width;
+        IMAGEHEIGHT = imgDuckDown.height;
     }
 
     // Create new duck with pr% chance per frame.

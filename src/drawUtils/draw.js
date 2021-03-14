@@ -80,6 +80,8 @@ export const draw = (model, difficulty) => {
   }, 10);
 };
 
+
+
 const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
   counter += 1;
   var min = Math.min(video.videoWidth, video.videoHeight);
@@ -119,6 +121,7 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
         if (ratio >= 0.7 && bullet === true) {
           DuckHandler.CreateShootingSound();
           DuckHandler.KillDuck(x * GAMESIZE, y * GAMESIZE);
+          console.log(x * GAMESIZE, y * GAMESIZE)
           bullet = false;
         }
 
