@@ -2,6 +2,7 @@ import DuckHandler from "../components/duckHandler/DuckHandler";
 import { drawBackground } from "./drawBackground";
 import { drawScoreboard } from "./drawScoreboard";
 import reload from "../sounds/reload.wav";
+import BGOHandler from "../components/BackGroundObjects/BackGroundObjects"
 
 let bullet = true;
 let shots = [];
@@ -37,21 +38,25 @@ export const draw = (model, difficulty) => {
   switch (difficulty) {
     case "easy": {
       DuckHandler.InitializeDucks(easy);
+      BGOHandler.initializeBGOHandler(easy);
       GAMESIZE = easy.size;
       break;
     }
     case "medium": {
       DuckHandler.InitializeDucks(medium);
+      BGOHandler.initializeBGOHandler(medium);
       GAMESIZE = medium.size;
       break;
     }
     case "impossible": {
       DuckHandler.InitializeDucks(impossible);
+      BGOHandler.initializeBGOHandler(impossible);
       GAMESIZE = impossible.size;
       break;
     }
     default: {
       DuckHandler.InitializeDucks(medium);
+      BGOHandler.initializeBGOHandler(medium);
       GAMESIZE = medium.size;
       break;
     }
@@ -136,11 +141,14 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
     counter = 0;
   }
 
-  drawCrosshair(gameCtx, x, y, GAMESIZE);
 
   DuckHandler.CreateNewDuck();
   DuckHandler.DrawDucksAndUpdate(gameCtx);
   DuckHandler.DeleteDucks();
+  BGOHandler.createNewObject();
+  BGOHandler.drawObjects(gameCtx);
+  drawCrosshair(gameCtx, x, y, GAMESIZE);
+
 
   let escapedDucks = DuckHandler.escapeCount;
   if (escapedDucks === lives) {
