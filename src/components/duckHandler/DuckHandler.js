@@ -2,6 +2,7 @@ import duckDown from './duckDown.png'
 import duckUp from './duckUp.png'
 import duckDead from './duckDead.png'
 
+// https://mixkit.co/free-sound-effects/gun/
 import shoot from '../../sounds/shoot.mp3'
 
 const imgDuckDown = new Image();
@@ -10,8 +11,8 @@ const imgDuckUp = new Image();
 imgDuckUp.src = duckUp;
 const imgDuckDead = new Image();
 imgDuckDead.src = duckDead;
-const IMAGEWIDTH = imgDuckDown.width;
-const IMAGEHEIGHT = imgDuckDown.height;
+var IMAGEWIDTH;
+var IMAGEHEIGHT;
 
 // class to handle all duck related things
 export default class DuckHandler {
@@ -22,6 +23,8 @@ export default class DuckHandler {
         this.escapeCount = 0; // Keeps count how many ducks have escaped from the frame
         this.killCount = 0; // Keeps count how many the player has managed to shoot.
         this.difficulty = difficulty;
+        IMAGEWIDTH = imgDuckDown.width;
+        IMAGEHEIGHT = imgDuckDown.height;
     }
 
     // Create new duck with pr% chance per frame.
@@ -116,7 +119,7 @@ class Duck {
                 }
 
                 // Draw 10 frames with wings up and down
-                if (this.counter == 10) {
+                if (this.counter === 10) {
                     this.pose = false;
                     this.counter = 0;
                 }
@@ -131,7 +134,7 @@ class Duck {
                 else {
                     this.flipImage(imgDuckDown, 0, 0, ctx);
                 }
-                if (this.counter == 10) {
+                if (this.counter === 10) {
                     this.pose = true;
                     this.counter = 0;
                 }

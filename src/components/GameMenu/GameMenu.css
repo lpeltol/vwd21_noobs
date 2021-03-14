@@ -1,5 +1,6 @@
 .Menu {
-  height: 30vw;
+  height: auto;
+  min-height: 30vw;
   width: 30vw;
   display: flex;
   flex-direction: column;
@@ -54,4 +55,12 @@
   font-weight: bold;
   font-size: 30px;
   margin: 20px 0 10px 0;
+}
+
+.HandOpen {
+  width: 65px;
+}
+
+.HandClosed {
+  width: 50px;
 }

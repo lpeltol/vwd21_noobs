@@ -1,10 +1,11 @@
 import DuckHandler from "../components/duckHandler/DuckHandler";
 import { drawBackground } from "./drawBackground";
 import { drawScoreboard } from "./drawScoreboard";
+
+// https://mixkit.co/free-sound-effects/gun/
 import reload from "../sounds/reload.wav";
 
 let bullet = true;
-let shots = [];
 let lives = 10;
 const VIDEOSIZE = 150;
 var GAMESIZE;
@@ -99,7 +100,7 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
   // HANDTRACK
   if (counter === 5) {
     model.detect(imgData).then((predictions) => {
-      if (predictions?.[0]?.bbox != undefined) {
+      if (predictions?.[0]?.bbox !== undefined) {
         x = predictions[0].bbox[0] + predictions[0].bbox[2] / 2;
         y = predictions[0].bbox[1] + predictions[0].bbox[3] / 2;
         var positions = calculateAveragePosition(x, y);
@@ -184,14 +185,6 @@ const drawCrosshair = (ctx, x, y, SIZE) => {
   ctx.restore();
 };
 
-const drawBoundingBox = (ctx, x, y, w, h) => {
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(x, y, w, -h);
-  ctx.stroke();
-  ctx.restore();
-};
-
 const calculateAveragePosition = (x, y) => {
   if (xPositions.length < numAvgPos) {
     xPositions.push(x);
@@ -210,3 +203,12 @@ const calculateAveragePosition = (x, y) => {
 
   return [xAvg, yAvg];
 };
+
+// Helper function to visualize hand postion in canvas
+// const drawBoundingBox = (ctx, x, y, w, h) => {
+//   ctx.save();
+//   ctx.beginPath();
+//   ctx.rect(x, y, w, -h);
+//   ctx.stroke();
+//   ctx.restore();
+// };
