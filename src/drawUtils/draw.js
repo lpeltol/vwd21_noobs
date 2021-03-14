@@ -4,6 +4,7 @@ import { drawScoreboard } from "./drawScoreboard";
 
 // https://mixkit.co/free-sound-effects/gun/
 import reload from "../sounds/reload.wav";
+import BGOHandler from "../components/BackGroundObjects/BackGroundObjects"
 
 let bullet = true;
 let lives = 10;
@@ -38,21 +39,25 @@ export const draw = (model, difficulty) => {
   switch (difficulty) {
     case "easy": {
       DuckHandler.InitializeDucks(easy);
+      BGOHandler.initializeBGOHandler(easy);
       GAMESIZE = easy.size;
       break;
     }
     case "medium": {
       DuckHandler.InitializeDucks(medium);
+      BGOHandler.initializeBGOHandler(medium);
       GAMESIZE = medium.size;
       break;
     }
     case "impossible": {
       DuckHandler.InitializeDucks(impossible);
+      BGOHandler.initializeBGOHandler(impossible);
       GAMESIZE = impossible.size;
       break;
     }
     default: {
       DuckHandler.InitializeDucks(medium);
+      BGOHandler.initializeBGOHandler(medium);
       GAMESIZE = medium.size;
       break;
     }
@@ -80,6 +85,8 @@ export const draw = (model, difficulty) => {
     drawScene(gameCanvas, videoCtx, gameCtx, video, model, intervalId);
   }, 10);
 };
+
+
 
 const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
   counter += 1;
@@ -120,6 +127,7 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
         if (ratio >= 0.7 && bullet === true) {
           DuckHandler.CreateShootingSound();
           DuckHandler.KillDuck(x * GAMESIZE, y * GAMESIZE);
+          console.log(x * GAMESIZE, y * GAMESIZE)
           bullet = false;
         }
 
@@ -134,11 +142,14 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
     counter = 0;
   }
 
-  drawCrosshair(gameCtx, x, y, GAMESIZE);
 
   DuckHandler.CreateNewDuck();
   DuckHandler.DrawDucksAndUpdate(gameCtx);
   DuckHandler.DeleteDucks();
+  BGOHandler.createNewObject();
+  BGOHandler.drawObjects(gameCtx);
+  drawCrosshair(gameCtx, x, y, GAMESIZE);
+
 
   let escapedDucks = DuckHandler.escapeCount;
   if (escapedDucks === lives) {
