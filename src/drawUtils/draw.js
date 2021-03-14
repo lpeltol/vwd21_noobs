@@ -4,7 +4,7 @@ import { drawScoreboard } from "./drawScoreboard";
 
 // https://mixkit.co/free-sound-effects/gun/
 import reload from "../sounds/reload.wav";
-import BGOHandler from "../components/BackGroundObjects/BackGroundObjects"
+import BGOHandler from "../components/BackGroundObjects/BackGroundObjects";
 
 let bullet = true;
 let lives = 10;
@@ -86,8 +86,6 @@ export const draw = (model, difficulty) => {
   }, 10);
 };
 
-
-
 const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
   counter += 1;
   var min = Math.min(video.videoWidth, video.videoHeight);
@@ -127,7 +125,7 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
         if (ratio >= 0.7 && bullet === true) {
           DuckHandler.CreateShootingSound();
           DuckHandler.KillDuck(x * GAMESIZE, y * GAMESIZE);
-          console.log(x * GAMESIZE, y * GAMESIZE)
+          console.log(x * GAMESIZE, y * GAMESIZE);
           bullet = false;
         }
 
@@ -142,14 +140,14 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
     counter = 0;
   }
 
+  BGOHandler.createNewObject();
+  BGOHandler.drawObjects(gameCtx);
 
   DuckHandler.CreateNewDuck();
   DuckHandler.DrawDucksAndUpdate(gameCtx);
   DuckHandler.DeleteDucks();
-  BGOHandler.createNewObject();
-  BGOHandler.drawObjects(gameCtx);
-  drawCrosshair(gameCtx, x, y, GAMESIZE);
 
+  drawCrosshair(gameCtx, x, y, GAMESIZE);
 
   let escapedDucks = DuckHandler.escapeCount;
   if (escapedDucks === lives) {

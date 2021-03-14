@@ -17,7 +17,10 @@ const StreamVideo = () => {
         video.srcObject = stream;
       })
       .catch(function (error) {
-        console.log("Something went wrong! Make sure you have webcam enabled", error);
+        console.log(
+          "Something went wrong! Make sure you have webcam enabled",
+          error
+        );
       });
   }
 
