@@ -6,7 +6,6 @@ import { drawScoreboard } from "./drawScoreboard";
 import reload from "../sounds/reload.wav";
 import BGOHandler from "../components/BackGroundObjects/BackGroundObjects";
 
-
 let bullet = true;
 let lives = 10;
 const VIDEOSIZE = 150;
@@ -202,7 +201,6 @@ const calculateAveragePosition = (x, y) => {
 };
 
 const getVideoCanvasImageData = (video, videoCtx) => {
-
   var min = Math.min(video.videoWidth, video.videoHeight);
   var sx = (video.videoWidth - min) / 2;
   var sy = (video.videoHeight - min) / 2;
@@ -214,7 +212,7 @@ const getVideoCanvasImageData = (video, videoCtx) => {
   videoCtx.restore();
 
   return videoCtx.getImageData(0, 0, VIDEOSIZE, VIDEOSIZE);
-}
+};
 
 // Helper function to visualize hand postion in canvas
 // const drawBoundingBox = (ctx, x, y, w, h) => {
