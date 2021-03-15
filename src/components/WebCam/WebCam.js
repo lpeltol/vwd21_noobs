@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import * as handpose from "handtrackjs";
+import * as handpose from "handtrackjs"; // https://blog.tensorflow.org/2019/11/handtrackjs-tracking-hand-interactions.html
 import { GameContainer } from "../GameContainer/GameContainer";
 import "./WebCam.css";
 

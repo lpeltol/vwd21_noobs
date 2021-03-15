@@ -6,6 +6,7 @@ import { drawScoreboard } from "./drawScoreboard";
 import reload from "../sounds/reload.wav";
 import BGOHandler from "../components/BackGroundObjects/BackGroundObjects";
 
+
 let bullet = true;
 let lives = 10;
 const VIDEOSIZE = 150;
@@ -88,19 +89,8 @@ export const draw = (model, difficulty) => {
 
 const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
   counter += 1;
-  var min = Math.min(video.videoWidth, video.videoHeight);
-  var sx = (video.videoWidth - min) / 2;
-  var sy = (video.videoHeight - min) / 2;
 
-  videoCtx.save();
-  videoCtx.beginPath();
-  videoCtx.clearRect(0, 0, VIDEOSIZE, VIDEOSIZE);
-  videoCtx.drawImage(video, sx, sy, min, min, 0, 0, VIDEOSIZE, VIDEOSIZE);
-  videoCtx.restore();
-
-  var imgData = videoCtx.getImageData(0, 0, VIDEOSIZE, VIDEOSIZE);
-
-  drawBackground(GAMESIZE, GAMESIZE, gameCtx);
+  var imgData = getVideoCanvasImageData(video, videoCtx);
 
   // HANDTRACK
   if (counter === 5) {
@@ -142,11 +132,9 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
 
   BGOHandler.createNewObject();
   BGOHandler.drawObjects(gameCtx);
-
   DuckHandler.CreateNewDuck();
   DuckHandler.DrawDucksAndUpdate(gameCtx);
   DuckHandler.DeleteDucks();
-
   drawCrosshair(gameCtx, x, y, GAMESIZE);
 
   let escapedDucks = DuckHandler.escapeCount;
@@ -212,6 +200,21 @@ const calculateAveragePosition = (x, y) => {
 
   return [xAvg, yAvg];
 };
+
+const getVideoCanvasImageData = (video, videoCtx) => {
+
+  var min = Math.min(video.videoWidth, video.videoHeight);
+  var sx = (video.videoWidth - min) / 2;
+  var sy = (video.videoHeight - min) / 2;
+
+  videoCtx.save();
+  videoCtx.beginPath();
+  videoCtx.clearRect(0, 0, VIDEOSIZE, VIDEOSIZE);
+  videoCtx.drawImage(video, sx, sy, min, min, 0, 0, VIDEOSIZE, VIDEOSIZE);
+  videoCtx.restore();
+
+  return videoCtx.getImageData(0, 0, VIDEOSIZE, VIDEOSIZE);
+}
 
 // Helper function to visualize hand postion in canvas
 // const drawBoundingBox = (ctx, x, y, w, h) => {
