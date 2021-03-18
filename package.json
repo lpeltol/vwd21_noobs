@@ -1,7 +1,7 @@
 {
   "homepage": "https://lpeltol.github.io/vwd21_noobs/",
   "name": "vwd21_noobs",
-  "version": "1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@tensorflow/tfjs": "^3.0.0",
