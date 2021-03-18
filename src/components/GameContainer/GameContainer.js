@@ -49,6 +49,7 @@ export const GameContainer = ({ model }) => {
                     <select
                       id="difficulty"
                       onChange={(e) => setDifficulty(e.target.value)}
+                      value={difficulty}
                     >
                       <option value="easy">Easy</option>
                       <option value="medium">Normal</option>
@@ -70,6 +71,7 @@ export const GameContainer = ({ model }) => {
                   <select
                     id="difficulty2"
                     onChange={(e) => setDifficulty(e.target.value)}
+                    value={difficulty}
                   >
                     <option value="easy">Easy</option>
                     <option value="medium">Normal</option>
