@@ -1,5 +1,4 @@
 import DuckHandler from "../components/duckHandler/DuckHandler";
-import { drawBackground } from "./drawBackground";
 import { drawScoreboard } from "./drawScoreboard";
 
 // https://mixkit.co/free-sound-effects/gun/

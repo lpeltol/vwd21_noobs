@@ -140,7 +140,7 @@ class CelestialObject {
 
     if (this.x > this.radius * 2 * this.size + this.size) {
       this.color =
-        this.color == "gray" ? (this.color = "yellow") : (this.color = "gray");
+        this.color === "gray" ? (this.color = "yellow") : (this.color = "gray");
       this.x = -this.radius * this.size;
       this.y = this.size / 2;
       this.t = 0;
