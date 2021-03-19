@@ -1,6 +1,6 @@
-import duckDown from "./duckDown.png";
-import duckUp from "./duckUp.png";
-import duckDead from "./duckDead.png";
+import duckDown from "../../images/duckDown.png";
+import duckUp from "../../images/duckUp.png";
+import duckDead from "../../images/duckDead.png";
 
 // https://mixkit.co/free-sound-effects/gun/
 import shoot from "../../sounds/shoot.mp3";

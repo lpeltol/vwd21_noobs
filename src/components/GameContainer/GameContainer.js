@@ -3,8 +3,8 @@ import PulseLoader from "react-spinners/PulseLoader";
 import { draw } from "../../drawUtils/draw";
 import { drawBackground } from "../../drawUtils/drawBackground";
 import { GameMenu } from "../GameMenu/GameMenu";
-import handOpen from "../GameMenu/handOpen.png";
-import handClosed from "../GameMenu/handClosed.png";
+import handOpen from "../../images/handClosed.png";
+import handClosed from "../../images/handClosed.png";
 import "./GameContainer.css";
 
 const initBackground = () => {

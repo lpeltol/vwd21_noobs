@@ -100,8 +100,6 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
         x = positions[0] / VIDEOSIZE;
         y = positions[1] / VIDEOSIZE;
 
-        // x = (predictions[0].bbox[0] + predictions[0].bbox[2] / 2) / VIDEOSIZE;
-        // y = (predictions[0].bbox[1] + predictions[0].bbox[3] / 2) / VIDEOSIZE;
         var ratio = predictions[0].bbox[2] / predictions[0].bbox[3];
 
         var x1 = x - 0.5;
@@ -113,7 +111,6 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
         if (ratio >= 0.7 && bullet === true) {
           DuckHandler.CreateShootingSound();
           DuckHandler.KillDuck(x * GAMESIZE, y * GAMESIZE);
-          console.log(x * GAMESIZE, y * GAMESIZE);
           bullet = false;
         }
 
@@ -212,12 +209,3 @@ const getVideoCanvasImageData = (video, videoCtx) => {
 
   return videoCtx.getImageData(0, 0, VIDEOSIZE, VIDEOSIZE);
 };
-
-// Helper function to visualize hand postion in canvas
-// const drawBoundingBox = (ctx, x, y, w, h) => {
-//   ctx.save();
-//   ctx.beginPath();
-//   ctx.rect(x, y, w, -h);
-//   ctx.stroke();
-//   ctx.restore();
-// };
