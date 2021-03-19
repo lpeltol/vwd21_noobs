@@ -81,47 +81,18 @@ export const draw = (model, difficulty) => {
   var gameCtx = gameCanvas.getContext("2d");
 
   let intervalId = setInterval(function () {
-    drawScene(gameCanvas, videoCtx, gameCtx, video, model, intervalId);
+    gameLoop(gameCanvas, videoCtx, gameCtx, video, model, intervalId);
   }, 10);
 };
 
-const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
+const gameLoop = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
   counter += 1;
 
   var imgData = getVideoCanvasImageData(video, videoCtx);
 
   // HANDTRACK
   if (counter === 5) {
-    model.detect(imgData).then((predictions) => {
-      if (predictions?.[0]?.bbox !== undefined) {
-        x = predictions[0].bbox[0] + predictions[0].bbox[2] / 2;
-        y = predictions[0].bbox[1] + predictions[0].bbox[3] / 2;
-        var positions = calculateAveragePosition(x, y);
-        x = positions[0] / VIDEOSIZE;
-        y = positions[1] / VIDEOSIZE;
-
-        var ratio = predictions[0].bbox[2] / predictions[0].bbox[3];
-
-        var x1 = x - 0.5;
-        var y1 = y - 0.5;
-        var a = 2;
-        x = x + x1 / a;
-        y = y + y1 / a;
-
-        if (ratio >= 0.7 && bullet === true) {
-          DuckHandler.CreateShootingSound();
-          DuckHandler.KillDuck(x * GAMESIZE, y * GAMESIZE);
-          bullet = false;
-        }
-
-        if (ratio <= 0.6 && bullet === false) {
-          var reloadSound = new Audio(reload);
-          reloadSound.play();
-          bullet = true;
-        }
-      }
-    });
-
+    handDetect(model, imgData);
     counter = 0;
   }
 
@@ -132,8 +103,7 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
   DuckHandler.DeleteDucks();
   drawCrosshair(gameCtx, x, y, GAMESIZE);
 
-  let escapedDucks = DuckHandler.escapeCount;
-  if (escapedDucks === lives) {
+  if (DuckHandler.escapeCount === lives) {
     clearInterval(intervalId);
     let gameOverMenu = document.getElementById("GameOver");
     gameOverMenu.style.display = "flex";
@@ -208,4 +178,38 @@ const getVideoCanvasImageData = (video, videoCtx) => {
   videoCtx.restore();
 
   return videoCtx.getImageData(0, 0, VIDEOSIZE, VIDEOSIZE);
+};
+
+export const handDetect = (model, imgData) => {
+  model.detect(imgData).then((predictions) => {
+    if (predictions?.[0]?.bbox !== undefined) {
+      x = predictions[0].bbox[0] + predictions[0].bbox[2] / 2;
+      y = predictions[0].bbox[1] + predictions[0].bbox[3] / 2;
+      var positions = calculateAveragePosition(x, y);
+      x = positions[0] / VIDEOSIZE;
+      y = positions[1] / VIDEOSIZE;
+
+      var ratio = predictions[0].bbox[2] / predictions[0].bbox[3];
+
+      var x1 = x - 0.5;
+      var y1 = y - 0.5;
+      var a = 2;
+      x = x + x1 / a;
+      y = y + y1 / a;
+
+      // When hand is spread → Hands boundingboxes ratio of vertical and horizontal lines length approaches 1
+      if (ratio >= 0.7 && bullet === true) {
+        DuckHandler.CreateShootingSound();
+        DuckHandler.KillDuck(x * GAMESIZE, y * GAMESIZE);
+        bullet = false;
+      }
+
+      // When hand is closed → Hands boundingboxes ratio of vertical and horizontal lines length approaches 0.5
+      if (ratio <= 0.6 && bullet === false) {
+        var reloadSound = new Audio(reload);
+        reloadSound.play();
+        bullet = true;
+      }
+    }
+  });
 };
