@@ -1,8 +1,6 @@
 import DuckHandler from "../components/duckHandler/DuckHandler";
 import { drawScoreboard } from "./drawScoreboard";
-
-// https://mixkit.co/free-sound-effects/gun/
-import reload from "../sounds/reload.wav";
+import { handDetect } from "../components/HandTrack/handDetect"
 import BGOHandler from "../components/BackGroundObjects/BackGroundObjects";
 
 let bullet = true;
@@ -12,9 +10,7 @@ var GAMESIZE;
 let counter = 0;
 let x = 0.5;
 let y = 0.5;
-const numAvgPos = 5;
-var xPositions = [];
-var yPositions = [];
+
 
 var easy = {
   probability: 0.005,
@@ -81,50 +77,21 @@ export const draw = (model, difficulty) => {
   var gameCtx = gameCanvas.getContext("2d");
 
   let intervalId = setInterval(function () {
-    drawScene(gameCanvas, videoCtx, gameCtx, video, model, intervalId);
+    gameLoop(gameCanvas, videoCtx, gameCtx, video, model, intervalId);
   }, 10);
 };
 
-const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
+const gameLoop = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
+
   counter += 1;
-
-  var imgData = getVideoCanvasImageData(video, videoCtx);
-
+  
   // HANDTRACK
   if (counter === 5) {
-    model.detect(imgData).then((predictions) => {
-      if (predictions?.[0]?.bbox !== undefined) {
-        x = predictions[0].bbox[0] + predictions[0].bbox[2] / 2;
-        y = predictions[0].bbox[1] + predictions[0].bbox[3] / 2;
-        var positions = calculateAveragePosition(x, y);
-        x = positions[0] / VIDEOSIZE;
-        y = positions[1] / VIDEOSIZE;
-
-        // x = (predictions[0].bbox[0] + predictions[0].bbox[2] / 2) / VIDEOSIZE;
-        // y = (predictions[0].bbox[1] + predictions[0].bbox[3] / 2) / VIDEOSIZE;
-        var ratio = predictions[0].bbox[2] / predictions[0].bbox[3];
-
-        var x1 = x - 0.5;
-        var y1 = y - 0.5;
-        var a = 2;
-        x = x + x1 / a;
-        y = y + y1 / a;
-
-        if (ratio >= 0.7 && bullet === true) {
-          DuckHandler.CreateShootingSound();
-          DuckHandler.KillDuck(x * GAMESIZE, y * GAMESIZE);
-          console.log(x * GAMESIZE, y * GAMESIZE);
-          bullet = false;
-        }
-
-        if (ratio <= 0.6 && bullet === false) {
-          var reloadSound = new Audio(reload);
-          reloadSound.play();
-          bullet = true;
-        }
-      }
-    });
-
+    var imgData = getVideoCanvasImageData(video, videoCtx, VIDEOSIZE, GAMESIZE, DuckHandler);
+    var pos = handDetect(model, imgData)
+    x = pos[0];
+    y = pos[1];
+    bullet = pos[2]
     counter = 0;
   }
 
@@ -135,8 +102,7 @@ const drawScene = (gameCanvas, videoCtx, gameCtx, video, model, intervalId) => {
   DuckHandler.DeleteDucks();
   drawCrosshair(gameCtx, x, y, GAMESIZE);
 
-  let escapedDucks = DuckHandler.escapeCount;
-  if (escapedDucks === lives) {
+  if (DuckHandler.escapeCount === lives) {
     clearInterval(intervalId);
     let gameOverMenu = document.getElementById("GameOver");
     gameOverMenu.style.display = "flex";
@@ -180,25 +146,6 @@ const drawCrosshair = (ctx, x, y, SIZE) => {
   ctx.restore();
 };
 
-const calculateAveragePosition = (x, y) => {
-  if (xPositions.length < numAvgPos) {
-    xPositions.push(x);
-    yPositions.push(y);
-  } else {
-    xPositions.push(x);
-    yPositions.push(y);
-
-    xPositions.splice(0, 1);
-    yPositions.splice(0, 1);
-  }
-
-  // https://jrsinclair.com/articles/2019/five-ways-to-average-with-js-reduce/
-  var xAvg = xPositions.reduce((a, b) => a + b) / xPositions.length;
-  var yAvg = yPositions.reduce((a, b) => a + b) / yPositions.length;
-
-  return [xAvg, yAvg];
-};
-
 const getVideoCanvasImageData = (video, videoCtx) => {
   var min = Math.min(video.videoWidth, video.videoHeight);
   var sx = (video.videoWidth - min) / 2;
@@ -212,12 +159,3 @@ const getVideoCanvasImageData = (video, videoCtx) => {
 
   return videoCtx.getImageData(0, 0, VIDEOSIZE, VIDEOSIZE);
 };
-
-// Helper function to visualize hand postion in canvas
-// const drawBoundingBox = (ctx, x, y, w, h) => {
-//   ctx.save();
-//   ctx.beginPath();
-//   ctx.rect(x, y, w, -h);
-//   ctx.stroke();
-//   ctx.restore();
-// };
